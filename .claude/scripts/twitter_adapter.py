@@ -31,7 +31,7 @@ except ImportError:
 
 @dataclass
 class TwitterAction:
-    """A Twitter action to be executed via ClaudeKit Browser Extension"""
+    """A Twitter action to be executed via browser extension"""
     action_type: str
     target_handle: str  # @username
     target_name: str

@@ -1,6 +1,6 @@
 # Instagram Command
 
-Execute Instagram actions using ClaudeKit Browser Extension via WebSocket.
+Execute Instagram actions using browser extension via WebSocket.
 
 ## Usage
 

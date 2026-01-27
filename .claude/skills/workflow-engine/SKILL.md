@@ -496,7 +496,7 @@ Do you approve this workflow? (yes/no)
 
 ### Phase 4: Autonomous Execution
 
-After approval, use ClaudeKit Browser Extension to execute actions:
+After approval, use browser extension to execute actions:
 
 1. Get next action from workflow
 2. Execute via HTTP API (curl to http://localhost:3000/api/[platform]/action)
@@ -566,9 +566,9 @@ python .claude/scripts/rate_limiter.py --user USER_ID --platform linkedin --acti
 ### Gmail Actions
 - `send` - Send email (via gmail_client.py)
 
-## ClaudeKit Browser Extension Execution
+## Browser Extension Execution
 
-**ClaudeKit Browser Extension connects via WebSocket** - local, fast, and free!
+**Browser extension connects via WebSocket** - local, fast, and free!
 
 ### For LinkedIn/Twitter/Instagram Actions:
 
@@ -585,7 +585,7 @@ python .claude/scripts/twitter_adapter.py task --action dm --handle "@username" 
 python .claude/scripts/instagram_adapter.py task --action dm --handle "@username" --name "John" --message "Hey John..." --user default
 ```
 
-### Execute with ClaudeKit Browser Extension:
+### Execute with browser extension:
 
 ```
 1. Check extension connection:

@@ -34,10 +34,10 @@ Checks:
 |---------|---------------|
 | Python | Python 3.x installed and accessible |
 | Node.js | Node.js 18+ installed |
-| TLDraw Canvas | tldraw-canvas/ dependencies installed |
+| Canvas | tldraw-canvas/ dependencies installed |
 | Gmail OAuth | credentials.json and token.json present |
 | Exa API | EXA_API_KEY set in environment |
-| Browser Extension | ClaudeKit extension directory exists |
+| Browser Extension | extension directory exists |
 | Output dirs | output/workflows, logs, discovery, reports exist |
 | Rate limiter | rate_limits.json present and valid |
 | Team config | team.json present |

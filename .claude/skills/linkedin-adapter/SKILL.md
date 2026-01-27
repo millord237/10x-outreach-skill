@@ -3,7 +3,7 @@ name: linkedin-adapter
 description: |
   LinkedIn automation adapter for the 100X Outreach System.
   Use this skill when performing LinkedIn actions like connecting, messaging, viewing profiles, liking posts, or commenting.
-  This skill controls the ClaudeKit Browser Extension to execute LinkedIn actions with templates.
+  This skill controls the browser extension to execute LinkedIn actions with templates.
 allowed-tools:
   - Bash
   - Read
@@ -17,11 +17,11 @@ allowed-tools:
 
 # LinkedIn Adapter Skill
 
-Automates LinkedIn actions using the ClaudeKit Universal Browser Extension with intelligent template rendering.
+Automates LinkedIn actions using the browser extension with intelligent template rendering.
 
-## ClaudeKit Browser Extension: Local Control
+## Browser Extension: Local Control
 
-**Fast, local browser automation!** The ClaudeKit extension provides direct control over your browser via WebSocket.
+**Fast, local browser automation!** The extension provides direct control over your browser via WebSocket.
 
 Benefits:
 - ✅ **Faster**: Local execution, no cloud latency

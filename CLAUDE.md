@@ -6,7 +6,7 @@ A comprehensive multi-platform outreach automation system for Claude Code with i
 
 ---
 
-## 🚨 IMPORTANT: Initial Setup Check
+## IMPORTANT: Initial Setup Check
 
 **BEFORE doing anything else, you MUST check if initial setup is complete.**
 
@@ -23,7 +23,6 @@ A comprehensive multi-platform outreach automation system for Claude Code with i
 
 3. **If setup is NOT complete:**
    ```python
-   # Run auto-setup
    python .claude/scripts/auto_setup.py
    ```
 
@@ -36,20 +35,20 @@ A comprehensive multi-platform outreach automation system for Claude Code with i
 
 ---
 
-## 📦 What is 10x-Outreach-Skill?
+## What is 10x-Outreach-Skill?
 
-A comprehensive multi-platform outreach automation system for Claude Code with:
+A complete agency-in-a-box — every role a 20-person outreach team would fill, automated through Claude Code skills:
 
-**Recent Features** (v3.0):
-- ✅ **Automatic setup on first initialization**
-- ✅ **Intelligent canvas visualization** (CSV, research, workflows, LinkedIn profiles)
-- ✅ **Multi-format export** (PDF, PPT, PNG, MD, TXT, etc.)
-- ✅ **Custom statusline** (shows directory, git, model, session, context usage)
-- ✅ **Exa AI integration** (semantic search, websets)
-- ✅ **Workflow automation** (visual design → automatic execution)
-- ✅ **Browser extension** (LinkedIn, Twitter, Instagram automation)
-
-See [INTELLIGENT-CANVAS-ARCHITECTURE.md](INTELLIGENT-CANVAS-ARCHITECTURE.md) for full details.
+- **Discovery & Research** — Exa AI semantic search, websets, LinkedIn search
+- **Outreach & Campaigns** — Email, LinkedIn, Twitter, Instagram automation
+- **CRM & Pipeline** — Contact database, deal stages, follow-ups
+- **Project Management** — Task board, sprints, standups, milestones
+- **QA & Compliance** — CAN-SPAM/GDPR checks, spam scoring, brand voice
+- **Support & Tickets** — SLA tracking, knowledge base, auto-routing
+- **Integrations** — Webhooks, audit logging, external systems
+- **Access Control** — RBAC, multi-tenant, credential vault
+- **Visual Canvas** — Infinite canvas for workflow design and visualization
+- **Analytics** — Campaign metrics, engagement reports
 
 ## Installation
 
@@ -69,7 +68,7 @@ irm https://raw.githubusercontent.com/Anit-1to10x/10x-outreach-skill/main/instal
 ```bash
 git clone https://github.com/Anit-1to10x/10x-outreach-skill.git
 cd 10x-outreach-skill
-cd canvas && npm install
+cd tldraw-canvas && npm install
 ```
 
 ## Quick Start
@@ -79,30 +78,41 @@ cd canvas && npm install
 2. Starts the visual canvas on http://localhost:3000
 3. Opens the workflow designer
 
-### Core Commands
+## All Commands
 
-| Command | Description |
-|---------|-------------|
-| `/start` | **Start the visual canvas app** |
-| `/workflow create` | **Claude Code creates workflows visually in the canvas!** |
-| `/workflow run` | Execute a saved workflow |
-| `/exa` | **Search the web with Exa AI semantic search** |
-| `/websets` | **Create and manage curated web collections** |
-| `/discover` | Find people using Exa AI |
-| `/outreach` | Email campaigns |
-| `/compose` | Individual emails |
-| `/inbox` | Check Gmail inbox |
-| `/linkedin` | LinkedIn automation |
-| `/twitter` | Twitter automation |
-| `/instagram` | Instagram automation |
-| `/canvas` | Visual workflow builder |
-| `/team` | Manage team credentials |
+| Command | Role | Description |
+|---------|------|-------------|
+| `/start` | — | Start the visual canvas app |
+| `/discover` | Discovery Lead | Find people using Exa AI |
+| `/exa` | Exa Research | Semantic web search with Exa AI |
+| `/websets` | Websets Manager | Curated web collections |
+| `/accounts` | Account Manager | CRM contacts, deals, pipeline, follow-ups |
+| `/project` | Project Manager | Task board, sprints, standups, milestones |
+| `/content` | Content Marketer | Blog posts, social content, content calendars |
+| `/seo` | SEO Specialist | Keyword research, competitor analysis, audits |
+| `/compose` | Email Planner | Compose individual emails |
+| `/outreach` | Campaign Manager | Bulk email campaigns from Google Sheets |
+| `/inbox` | Inbox Manager | Read and search Gmail inbox |
+| `/reply` | Reply Writer | Generate and send email replies |
+| `/summarize` | Email Summarizer | Email digests and summaries |
+| `/linkedin` | LinkedIn Specialist | LinkedIn automation via extension |
+| `/twitter` | Twitter Specialist | Twitter automation via extension |
+| `/instagram` | Instagram Specialist | Instagram automation via extension |
+| `/qa` | QA / Compliance | Pre-send review, CAN-SPAM/GDPR, brand voice |
+| `/ticket` | Support Manager | Support tickets with SLA tracking |
+| `/ops` | Ops Manager | System health, logs, cleanup, backup |
+| `/analytics` | Analytics Lead | Campaign metrics and reports |
+| `/access` | Access Manager | RBAC, multi-tenant, credential vault |
+| `/webhook` | Integration Manager | Webhooks and external system integration |
+| `/verify` | Email Verifier | Email validation (MX, SPF, DKIM, DMARC) |
+| `/canvas` | Canvas Designer | Visual infinite canvas |
+| `/team` | Team Manager | Team member credentials |
+| `/workflow` | Workflow Engine | Multi-step, multi-platform workflows |
+| `/lookback` | Lookback | LinkedIn profile lookback |
 
-## TLDraw Canvas
+## Canvas
 
-A standalone, portable implementation of the official TLDraw SDK.
-
-The `tldraw-canvas` folder contains a **clean, portable** implementation using the **official TLDraw SDK** (v4.3.0) with zero custom modifications.
+The `tldraw-canvas` folder contains a portable infinite canvas for visual workflow design.
 
 **Quick Start:**
 ```bash
@@ -113,76 +123,44 @@ npm run dev
 
 Opens at **http://localhost:3000**
 
-### Features (Official TLDraw SDK)
-
-- ✨ **Infinite Canvas** - Pan and zoom freely across unlimited space
-- 🎨 **Drawing Tools** - Pen, highlighter, eraser
-- 📐 **Shapes** - Rectangle, ellipse, arrow, line, text, and more
-- 🖼️ **Media** - Embed images and videos
-- 📋 **Copy/Paste** - Full clipboard support with fidelity
-- ↩️ **Undo/Redo** - Complete history tracking
-- 💾 **Export** - PNG, SVG, or JSON format
-- 🔄 **Auto-Save** - Automatic persistence to localStorage
-- 👥 **Multiplayer** - Real-time collaboration (optional)
-
-### Basic Usage
-
-1. **Draw & Write** - Use the toolbar to select tools
-2. **Add Shapes** - Click shape buttons (rectangle, ellipse, arrow, etc.)
-3. **Add Media** - Drag and drop images or videos
-4. **Pan & Zoom** - Mouse drag to pan, scroll wheel to zoom
-5. **Select & Transform** - Click to select, drag handles to resize
-6. **Copy/Paste** - Ctrl+C / Ctrl+V (Cmd+C / Cmd+V on Mac)
-7. **Undo/Redo** - Ctrl+Z / Ctrl+Shift+Z
-8. **Export** - Menu → Export as PNG, SVG, or JSON
-
-### Portable Design
-
-The `tldraw-canvas` folder is designed to be **easily copied** to any other skill:
-
-1. Copy the entire `tldraw-canvas` folder
-2. Run `npm install` in the new location
-3. Update port in `vite.config.ts` if needed
-4. Run `npm run dev`
-
-That's it! No configuration needed.
-
-### TLDraw Resources
-
-- Official Docs: https://tldraw.dev
-- Quick Start: https://tldraw.dev/quick-start
-- API Reference: https://tldraw.dev/api
-- Examples: https://tldraw.dev/examples
-- GitHub: https://github.com/tldraw/tldraw
+### Features
+- Infinite canvas — pan and zoom freely
+- Drawing tools — pen, highlighter, eraser
+- Shapes — rectangle, ellipse, arrow, line, text
+- Media — embed images and videos
+- Export — PNG, SVG, or JSON
+- Auto-save — persistence to localStorage
 
 ## Directory Structure
 
 ```
 10x-Outreach-Skill/
 ├── .claude/                  # Skill code (portable)
-│   ├── skills/               # Skill definitions
-│   ├── commands/             # Slash commands
-│   ├── scripts/              # Python automation scripts
+│   ├── skills/               # Skill definitions (22 skills)
+│   ├── commands/             # Slash commands (27 commands)
+│   ├── agents/               # Autonomous agents (6 agents)
+│   ├── scripts/              # Python automation scripts (40+ scripts)
 │   ├── templates/            # Message templates
 │   ├── workflows/            # Workflow definitions
 │   ├── hooks/                # Claude Code hooks
-│   │   └── lib/              # Hook libraries (context-tracker, etc.)
-│   ├── statusline.cjs        # Custom statusline (Node.js)
-│   ├── statusline.ps1        # Custom statusline (PowerShell)
-│   └── statusline.sh         # Custom statusline (Shell)
+│   ├── mcp.json              # MCP server config + skill registry
+│   └── statusline.*          # Custom statusline
 │
-├── tldraw-canvas/            # Official TLDraw Canvas (SDK v4.3.0)
-│   ├── src/                  # Clean TLDraw implementation
-│   │   ├── App.tsx           # Pure TLDraw component
-│   │   ├── main.tsx          # React entry
-│   │   └── index.css         # Styles
-│   ├── package.json          # TLDraw dependencies
-│   └── README.md             # Portable TLDraw docs
+├── tldraw-canvas/            # Visual canvas
+│   ├── src/                  # Canvas implementation
+│   ├── package.json          # Dependencies
+│   └── README.md             # Canvas docs
+│
+├── browser-extension/        # Browser extension for social platforms
 │
 ├── output/                   # Runtime output
 │   ├── workflows/            # Saved workflows
 │   ├── logs/                 # Execution logs
-│   └── discovery/            # Discovered people
+│   ├── discovery/            # Discovered people
+│   ├── accounts/             # CRM data
+│   ├── projects/             # Project/task data
+│   ├── qa/                   # QA reviews
+│   └── tickets/              # Support tickets
 │
 ├── install.sh                # Unix installer
 ├── install.ps1               # Windows installer
@@ -191,11 +169,11 @@ That's it! No configuration needed.
 
 ## How It Works
 
-1. **Visual Canvas** (TLDraw) - Design workflows visually using the official TLDraw SDK
-2. **10x-Browser Extension** - Handles social platform automation via ClaudeKit Browser Extension
-3. **Gmail API** - Email sending with OAuth2
-4. **Intelligent Rate Limiting** - Prevents spam/detection
-5. **Single Approval** - Approve once, execute autonomously
+1. **Visual Canvas** — Design workflows visually on the infinite canvas
+2. **Browser Extension** — Handles social platform automation (LinkedIn, Twitter, Instagram)
+3. **Gmail API** — Email sending with OAuth2
+4. **Intelligent Rate Limiting** — Prevents spam/detection
+5. **Single Approval** — Approve once, execute autonomously
 
 ## Professional Outreach Rules
 
@@ -231,29 +209,18 @@ SENDER_EMAIL=your@gmail.com
 SENDER_NAME=Your Name
 ```
 
-### 10x-Browser Extension (for social platforms)
-The ClaudeKit Browser Extension handles automation for LinkedIn, Twitter, and Instagram.
-Located at: `C:\Users\Anit\Downloads\10x-Browser Extension`
+### Browser Extension (for social platforms)
+The browser extension handles automation for LinkedIn, Twitter, and Instagram.
+Install from the `browser-extension/` folder.
 
 ## Pre-Built Workflow Templates
 
 | Template | Duration | Platforms |
 |----------|----------|-----------|
-| 💼 B2B Outreach | 14 days | LinkedIn + Email |
-| 🤝 Brand Partnership | 21 days | Instagram + Twitter + Email |
-| ⭐ Influencer Outreach | 21 days | Social + Pitch |
-| 🌐 Multi-Platform | 30 days | All channels |
-
-
-## Browser Extension Integration
-
-The 10x-Outreach System integrates with the ClaudeKit Browser Extension for social platform automation:
-
-- **LinkedIn Actions** - Connect, message, view profiles, like, comment
-- **Twitter Actions** - Follow, DM, like, reply, retweet
-- **Instagram Actions** - Follow, DM, like, comment, story replies
-
-Extension path: `C:\Users\Anit\Downloads\10x-Browser Extension`
+| B2B Outreach | 14 days | LinkedIn + Email |
+| Brand Partnership | 21 days | Instagram + Twitter + Email |
+| Influencer Outreach | 21 days | Social + Pitch |
+| Multi-Platform | 30 days | All channels |
 
 ## License
 

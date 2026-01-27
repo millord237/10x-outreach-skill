@@ -17,7 +17,7 @@ cd tldraw-canvas && npm run dev
 ### 3. Notify User
 After the server starts, inform the user:
 - Canvas is running at http://localhost:3000
-- Official TLDraw SDK — infinite canvas with drawing, shapes, media, export
+- Infinite canvas with drawing, shapes, media, export
 - Auto-save to localStorage is enabled
 
 ## Quick Start (if already installed)

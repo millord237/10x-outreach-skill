@@ -2,7 +2,7 @@
 name: canvas-workflow
 description: |
   Visual workflow canvas for 10x-Team outreach system. Use this skill to design, visualize,
-  and execute multi-platform outreach workflows on an infinite canvas powered by TLDraw.
+  and execute multi-platform outreach workflows on an infinite canvas.
 allowed-tools:
   - Bash
   - Read
@@ -12,12 +12,12 @@ allowed-tools:
 
 # 10x-Team Visual Workflow Canvas
 
-A TLDraw-based infinite canvas for designing and visualizing outreach workflows. Design workflows visually, configure nodes, connect them with arrows, and export to Claude Code for execution.
+An infinite canvas for designing and visualizing outreach workflows. Design workflows visually, configure nodes, connect them with arrows, and export to Claude Code for execution.
 
 ## Quick Start
 
 ```bash
-# Start the canvas (official TLDraw SDK)
+# Start the canvas
 cd tldraw-canvas && npm install && npm run dev
 ```
 
@@ -163,7 +163,7 @@ The canvas works with Claude Code as the orchestration brain:
 ```
 Canvas (Design) → Export JSON → Claude Code (Orchestrate) → Skills (Execute)
                                       ↓
-                              ClaudeKit Browser Extension
+                              Browser Extension
                               Gmail API
                               Exa AI
 ```

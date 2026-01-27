@@ -3,7 +3,7 @@ name: twitter-adapter
 description: |
   Twitter/X automation adapter for the 100X Outreach System.
   Use this skill when performing Twitter actions like following, DMing, liking tweets, replying, or retweeting.
-  This skill controls the ClaudeKit Browser Extension to execute Twitter actions with templates.
+  This skill controls the browser extension to execute Twitter actions with templates.
 allowed-tools:
   - Bash
   - Read
@@ -17,11 +17,11 @@ allowed-tools:
 
 # Twitter/X Adapter Skill
 
-Automates Twitter/X actions using the ClaudeKit Universal Browser Extension with intelligent template rendering.
+Automates Twitter/X actions using the browser extension with intelligent template rendering.
 
-## ClaudeKit Browser Extension: Local Control
+## Browser Extension: Local Control
 
-**Fast, local browser automation!** The ClaudeKit extension provides direct control over your browser via WebSocket.
+**Fast, local browser automation!** The extension provides direct control over your browser via WebSocket.
 
 Benefits of WebSocket integration:
 - ✅ **Faster**: Local execution, no cloud latency

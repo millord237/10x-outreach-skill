@@ -51,17 +51,16 @@
     "env": "EXA_API_KEY in .env or .env.local"
   },
 
-  "browserExtension": {
+  "extension": {
     "path": "./browser-extension",
-    "description": "ClaudeKit Browser Extension for LinkedIn, Twitter, and Instagram automation",
-    "note": "Install the browser extension from ./browser-extension folder"
+    "description": "Browser extension for LinkedIn, Twitter, and Instagram automation",
+    "note": "Install from ./browser-extension folder"
   },
   "canvas": {
-    "type": "tldraw",
     "path": "./tldraw-canvas",
     "url": "http://localhost:3000",
     "start": "cd tldraw-canvas && npm run dev",
-    "note": "Official TLDraw SDK v4.3.0 — infinite canvas with drawing, shapes, media, export"
+    "note": "Infinite canvas with drawing, shapes, media, export"
   },
   "skills": {
     "discovery-engine": {
@@ -81,15 +80,15 @@
       "path": ".claude/skills/gmail-adapter/SKILL.md"
     },
     "linkedin-adapter": {
-      "description": "LinkedIn automation via ClaudeKit Browser Extension",
+      "description": "LinkedIn automation via browser extension",
       "path": ".claude/skills/linkedin-adapter/SKILL.md"
     },
     "twitter-adapter": {
-      "description": "Twitter automation via ClaudeKit Browser Extension",
+      "description": "Twitter automation via browser extension",
       "path": ".claude/skills/twitter-adapter/SKILL.md"
     },
     "instagram-adapter": {
-      "description": "Instagram automation via ClaudeKit Browser Extension",
+      "description": "Instagram automation via browser extension",
       "path": ".claude/skills/instagram-adapter/SKILL.md"
     },
     "outreach-manager": {
@@ -115,6 +114,30 @@
     "reply-generator": {
       "description": "Generate and send email replies",
       "path": ".claude/skills/reply-generator/SKILL.md"
+    },
+    "account-manager": {
+      "description": "CRM-style contact and deal pipeline management",
+      "path": ".claude/skills/account-manager/SKILL.md"
+    },
+    "project-manager": {
+      "description": "Task assignment, sprint planning, and status reports",
+      "path": ".claude/skills/project-manager/SKILL.md"
+    },
+    "qa-compliance": {
+      "description": "QA review and compliance checks for outreach",
+      "path": ".claude/skills/qa-compliance/SKILL.md"
+    },
+    "support-manager": {
+      "description": "Support ticket management with SLA tracking",
+      "path": ".claude/skills/support-manager/SKILL.md"
+    },
+    "integration-manager": {
+      "description": "Webhook and external system integration",
+      "path": ".claude/skills/integration-manager/SKILL.md"
+    },
+    "access-manager": {
+      "description": "User roles, permissions, and multi-tenant management",
+      "path": ".claude/skills/access-manager/SKILL.md"
     }
   },
   "workflows": {
@@ -145,7 +168,14 @@
       "discovery_engine.py",
       "team_manager.py",
       "rate_limiter.py",
-      "template_loader.py"
+      "template_loader.py",
+      "account_manager.py",
+      "project_manager.py",
+      "qa_checker.py",
+      "ticket_manager.py",
+      "sla_tracker.py",
+      "ops_manager.py",
+      "email_verifier.py"
     ]
   }
 }

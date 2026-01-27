@@ -1,11 +1,11 @@
 ---
 name: canvas
-description: Open the official TLDraw visual canvas
+description: Open the visual canvas
 ---
 
 # /canvas Command
 
-Opens the official TLDraw infinite canvas (TLDraw SDK v4.3.0).
+Opens the infinite canvas for visual workflow design.
 
 ## Usage
 
@@ -47,8 +47,7 @@ Then open: **http://localhost:3000/**
 | Ctrl+C / Ctrl+V | Copy / Paste |
 | Scroll | Zoom in/out |
 
-## TLDraw Resources
+## Canvas Resources
 
-- Official Docs: https://tldraw.dev
-- API Reference: https://tldraw.dev/api
-- Examples: https://tldraw.dev/examples
+- Documentation: See tldraw-canvas/README.md
+- Canvas directory: tldraw-canvas/

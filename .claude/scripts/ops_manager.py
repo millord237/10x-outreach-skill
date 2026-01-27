@@ -32,9 +32,9 @@ def check_status() -> dict:
     node_ok = os.system("node --version > /dev/null 2>&1") == 0 or os.system("node --version >nul 2>&1") == 0
     checks["node"] = {"ok": node_ok}
 
-    # TLDraw canvas
-    tldraw_deps = Path("tldraw-canvas/node_modules").exists()
-    checks["tldraw_canvas"] = {"ok": tldraw_deps, "note": "Run: cd tldraw-canvas && npm install" if not tldraw_deps else "Ready"}
+    # Canvas
+    canvas_deps = Path("tldraw-canvas/node_modules").exists()
+    checks["canvas"] = {"ok": canvas_deps, "note": "Run: cd tldraw-canvas && npm install" if not canvas_deps else "Ready"}
 
     # Gmail OAuth
     creds = Path(".claude/credentials.json").exists() or Path("credentials.json").exists()

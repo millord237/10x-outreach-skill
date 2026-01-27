@@ -70,7 +70,7 @@ Shows table with ID, Name, Status, Platforms, Nodes, Created date.
 
 ## 📍 Ports (IMPORTANT!)
 
-- **Canvas Frontend**: http://localhost:3000 (TLDraw)
+- **Canvas Frontend**: http://localhost:3000
 - **WebSocket**: ws://localhost:3001/ws (Commands)
 - **API**: http://localhost:3000/api (REST)
 
@@ -153,5 +153,5 @@ Shows table with ID, Name, Status, Platforms, Nodes, Created date.
 
 ---
 
-**Powered by TLDraw + ClaudeKit Extension + Exa.ai MCP**
+**Powered by Canvas + Browser Extension + Exa.ai MCP**
 **Developed by 10x.in** 🔥

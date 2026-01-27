@@ -3,7 +3,7 @@ name: instagram-adapter
 description: |
   Instagram automation adapter for the 100X Outreach System.
   Use this skill when performing Instagram actions like following, DMing, liking posts, commenting, or replying to stories.
-  This skill controls the ClaudeKit Browser Extension to execute Instagram actions with templates.
+  This skill controls the browser extension to execute Instagram actions with templates.
 allowed-tools:
   - Bash
   - Read
@@ -17,11 +17,11 @@ allowed-tools:
 
 # Instagram Adapter Skill
 
-Automates Instagram actions using the ClaudeKit Universal Browser Extension with intelligent template rendering.
+Automates Instagram actions using the browser extension with intelligent template rendering.
 
-## ClaudeKit Browser Extension: Local Control
+## Browser Extension: Local Control
 
-**Fast, local browser automation!** The ClaudeKit extension provides direct control over your browser via WebSocket.
+**Fast, local browser automation!** The extension provides direct control over your browser via WebSocket.
 
 Benefits of WebSocket integration:
 - ✅ **Faster**: Local execution, no cloud latency
