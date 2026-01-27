@@ -21,7 +21,8 @@ try:
     from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
     from rich.table import Table
     from rich.panel import Panel
-    from jinja2 import Template, Environment, FileSystemLoader
+    from jinja2 import Template, FileSystemLoader
+    from jinja2.sandbox import SandboxedEnvironment
 except ImportError as e:
     print(f"[X] Missing dependency: {e}")
     sys.exit(1)
@@ -55,7 +56,7 @@ class CampaignSender:
         self.save_copies = os.getenv('SAVE_SENT_COPIES', 'true').lower() == 'true'
 
         # Template environment
-        self.template_env = Environment(
+        self.template_env = SandboxedEnvironment(
             loader=FileSystemLoader(self.base_dir / 'templates'),
             autoescape=True
         )

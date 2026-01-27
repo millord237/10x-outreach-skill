@@ -19,6 +19,36 @@ const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('he
 const JWT_EXPIRY = '24h';
 const AUTH_TIMEOUT_MS = 10000; // 10 seconds to authenticate
 
+// Master key for token generation (required in production)
+const API_MASTER_KEY = process.env.API_MASTER_KEY || null;
+
+// Revoked tokens persistence
+const REVOKED_TOKENS_PATH = path.join(__dirname, '..', 'output', 'revoked-tokens.json');
+
+// Rate limiter for auth endpoints
+const authRateLimiter = {
+  attempts: new Map(), // ip -> { count, resetTime }
+  maxAttempts: 5,
+  windowMs: 60 * 1000, // 1 minute
+
+  check(ip) {
+    const now = Date.now();
+    const entry = this.attempts.get(ip);
+
+    if (!entry || now > entry.resetTime) {
+      this.attempts.set(ip, { count: 1, resetTime: now + this.windowMs });
+      return true;
+    }
+
+    if (entry.count >= this.maxAttempts) {
+      return false;
+    }
+
+    entry.count++;
+    return true;
+  }
+};
+
 // Simple JWT implementation (cross-platform, no external dependencies)
 const jwtUtils = {
   // Base64URL encode
@@ -108,8 +138,33 @@ const jwtUtils = {
   }
 };
 
-// Token storage (for revocation)
+// Token storage (for revocation) - load from disk
 const revokedTokens = new Set();
+(function loadRevokedTokens() {
+  try {
+    if (fs.existsSync(REVOKED_TOKENS_PATH)) {
+      const data = JSON.parse(fs.readFileSync(REVOKED_TOKENS_PATH, 'utf-8'));
+      if (Array.isArray(data)) {
+        data.forEach(t => revokedTokens.add(t));
+        console.log(`🔒 Loaded ${revokedTokens.size} revoked tokens from disk`);
+      }
+    }
+  } catch (e) {
+    console.error('Failed to load revoked tokens:', e);
+  }
+})();
+
+function persistRevokedTokens() {
+  try {
+    const outputDir = path.dirname(REVOKED_TOKENS_PATH);
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+    fs.writeFileSync(REVOKED_TOKENS_PATH, JSON.stringify([...revokedTokens], null, 2));
+  } catch (e) {
+    console.error('Failed to persist revoked tokens:', e);
+  }
+}
 
 // Permission definitions
 const PERMISSIONS = {
@@ -166,9 +221,19 @@ function authMiddleware(requiredPermission = null) {
   };
 }
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+// Middleware - Restrict CORS to localhost by default
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000,http://localhost:3001,http://localhost:5173,http://127.0.0.1:3000,http://127.0.0.1:5173').split(',');
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (e.g. server-to-server, curl)
+    if (!origin) return callback(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('CORS: origin not allowed'), false);
+  }
+}));
+app.use(express.json({ limit: '1mb' }));
 
 // Create HTTP server
 const server = createServer(app);
@@ -176,6 +241,26 @@ const server = createServer(app);
 // Create separate WebSocket server on different port
 const wsServer = createServer();
 const wss = new WebSocketServer({ server: wsServer, path: '/ws' });
+
+// Path traversal protection helper
+function sanitizeWorkflowName(name) {
+  // Strip path separators and parent directory references
+  return name.replace(/[\/\\]/g, '').replace(/\.\./g, '').replace(/\0/g, '');
+}
+
+// Video URL validation helper
+function isValidVideoUrl(url) {
+  try {
+    const parsed = new URL(url);
+    // Only allow http/https protocols
+    if (!['http:', 'https:'].includes(parsed.protocol)) return false;
+    // Reject shell metacharacters in the full URL string
+    if (/[;&|`$(){}[\]<>!#]/.test(url)) return false;
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 // Store commands queue (for backwards compatibility)
 const commandsQueue = [];
@@ -270,7 +355,7 @@ function handleWebSocketMessage(ws, message) {
   }
 
   // Check if authenticated (skip for development mode)
-  if (process.env.JWT_SECRET && !ws.isAuthenticated && type !== 'extension-connected') {
+  if (process.env.JWT_SECRET && !ws.isAuthenticated) {
     ws.send(JSON.stringify({
       type: 'auth-required',
       message: 'Please authenticate first',
@@ -454,7 +539,7 @@ function sendToExtension(data) {
 }
 
 // API: Send command to canvas (from Claude Code)
-app.post('/api/canvas/command', (req, res) => {
+app.post('/api/canvas/command', authMiddleware('canvas.command'), (req, res) => {
   const command = {
     id: `cmd-${++commandIdCounter}-${Date.now()}`,
     timestamp: Date.now(),
@@ -481,7 +566,7 @@ app.post('/api/canvas/command', (req, res) => {
 });
 
 // API: Batch commands (for sequential operations)
-app.post('/api/canvas/commands/batch', (req, res) => {
+app.post('/api/canvas/commands/batch', authMiddleware('canvas.command'), (req, res) => {
   const { commands: incomingCommands } = req.body;
 
   if (!Array.isArray(incomingCommands)) {
@@ -515,7 +600,7 @@ app.post('/api/canvas/commands/batch', (req, res) => {
 });
 
 // API: Poll for commands (backwards compatibility)
-app.get('/api/canvas/commands', (req, res) => {
+app.get('/api/canvas/commands', authMiddleware('canvas.view'), (req, res) => {
   const { lastId } = req.query;
 
   let commands = commandsQueue;
@@ -535,14 +620,14 @@ app.get('/api/canvas/commands', (req, res) => {
 });
 
 // API: Clear all commands
-app.post('/api/canvas/clear', (req, res) => {
+app.post('/api/canvas/clear', authMiddleware('canvas.edit'), (req, res) => {
   commandsQueue.length = 0;
   broadcast({ type: 'clear', timestamp: Date.now() });
   res.json({ success: true });
 });
 
 // API: Send command to extension
-app.post('/api/extension/command', async (req, res) => {
+app.post('/api/extension/command', authMiddleware('extension.command'), async (req, res) => {
   const command = {
     id: `ext-cmd-${++commandIdCounter}-${Date.now()}`,
     timestamp: Date.now(),
@@ -594,7 +679,7 @@ app.post('/api/extension/command', async (req, res) => {
 });
 
 // API: Get extension status
-app.get('/api/extension/status', (req, res) => {
+app.get('/api/extension/status', authMiddleware('extension.view'), (req, res) => {
   res.json({
     connected: extensionClients.size > 0,
     clients: extensionClients.size,
@@ -605,7 +690,7 @@ app.get('/api/extension/status', (req, res) => {
 });
 
 // API: Get activity log
-app.get('/api/extension/activities', (req, res) => {
+app.get('/api/extension/activities', authMiddleware('extension.view'), (req, res) => {
   const { limit = 100, offset = 0 } = req.query;
 
   const start = parseInt(offset);
@@ -620,7 +705,7 @@ app.get('/api/extension/activities', (req, res) => {
 });
 
 // API: Clear activity log
-app.post('/api/extension/activities/clear', (req, res) => {
+app.post('/api/extension/activities/clear', authMiddleware('extension.command'), (req, res) => {
   activityLog.length = 0;
 
   // Clear file
@@ -649,7 +734,7 @@ app.get('/api/status', (req, res) => {
 });
 
 // API: Save workflow (from canvas)
-app.post('/api/workflow/save', (req, res) => {
+app.post('/api/workflow/save', authMiddleware('workflow.create'), (req, res) => {
   const { workflow, name, description } = req.body;
 
   if (!workflow) {
@@ -754,11 +839,21 @@ app.post('/api/workflow/save', (req, res) => {
 });
 
 // API: Process video URL (YouTube, LinkedIn, etc.)
-app.post('/api/video/process', async (req, res) => {
+app.post('/api/video/process', authMiddleware('canvas.command'), async (req, res) => {
   const { nodeId, url, videoPath } = req.body;
 
   if (!nodeId || (!url && !videoPath)) {
     return res.status(400).json({ error: 'nodeId and url or videoPath required' });
+  }
+
+  // Validate URL to prevent command injection
+  if (url && !isValidVideoUrl(url)) {
+    return res.status(400).json({ error: 'Invalid video URL. Only http/https URLs without shell metacharacters are allowed.' });
+  }
+
+  // Validate videoPath - no shell metacharacters or traversal
+  if (videoPath && (/[;&|`$(){}[\]<>!#]/.test(videoPath) || videoPath.includes('..'))) {
+    return res.status(400).json({ error: 'Invalid video path.' });
   }
 
   console.log(`🎥 Processing video request: ${url || videoPath}`);
@@ -842,7 +937,7 @@ app.post('/api/video/process', async (req, res) => {
 });
 
 // API: List workflows
-app.get('/api/workflows', (req, res) => {
+app.get('/api/workflows', authMiddleware('workflow.view'), (req, res) => {
   const outputDir = path.join(__dirname, '..', 'output', 'workflows');
   const indexPath = path.join(outputDir, 'index.json');
 
@@ -864,8 +959,11 @@ app.get('/api/workflows', (req, res) => {
 });
 
 // API: Get workflow by name
-app.get('/api/workflow/:name', (req, res) => {
-  const { name } = req.params;
+app.get('/api/workflow/:name', authMiddleware('workflow.view'), (req, res) => {
+  const name = sanitizeWorkflowName(req.params.name);
+  if (!name) {
+    return res.status(400).json({ error: 'Invalid workflow name' });
+  }
   const outputDir = path.join(__dirname, '..', 'output', 'workflows');
   const workflowPath = path.join(outputDir, `${name}.json`);
 
@@ -883,8 +981,11 @@ app.get('/api/workflow/:name', (req, res) => {
 });
 
 // API: Update workflow status
-app.post('/api/workflow/:name/status', (req, res) => {
-  const { name } = req.params;
+app.post('/api/workflow/:name/status', authMiddleware('workflow.execute'), (req, res) => {
+  const name = sanitizeWorkflowName(req.params.name);
+  if (!name) {
+    return res.status(400).json({ error: 'Invalid workflow name' });
+  }
   const { status, executed, executionResult } = req.body;
 
   const outputDir = path.join(__dirname, '..', 'output', 'workflows');
@@ -966,8 +1067,25 @@ app.get('/api/workflow/latest', (req, res) => {
 // Authentication Endpoints
 // ============================================
 
-// API: Generate JWT token
+// API: Generate JWT token (requires API_MASTER_KEY in production)
 app.post('/api/auth/token', (req, res) => {
+  // Rate limiting
+  const clientIp = req.ip || req.socket.remoteAddress;
+  if (!authRateLimiter.check(clientIp)) {
+    return res.status(429).json({ error: 'Too many requests. Try again later.' });
+  }
+
+  // Require master key in production
+  if (process.env.JWT_SECRET) {
+    const masterKey = req.headers['x-api-master-key'] || req.body.masterKey;
+    if (!API_MASTER_KEY) {
+      return res.status(503).json({ error: 'API_MASTER_KEY not configured on server. Token generation disabled.' });
+    }
+    if (!masterKey || masterKey !== API_MASTER_KEY) {
+      return res.status(403).json({ error: 'Invalid or missing API master key' });
+    }
+  }
+
   const { userId, username, role = 'agent', permissions } = req.body;
 
   if (!userId) {
@@ -1041,6 +1159,7 @@ app.post('/api/auth/revoke', authMiddleware('admin.users'), (req, res) => {
   }
 
   revokedTokens.add(token);
+  persistRevokedTokens();
 
   // Disconnect any WebSocket clients using this token
   clients.forEach(client => {
